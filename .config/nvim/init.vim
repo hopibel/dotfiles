@@ -41,6 +41,16 @@ augroup PasswordManager
 	autocmd CursorHold,BufUnload pass.gpg call ClearClipboard()
 augroup END
 
+" set colors early so they can be overridden
+" truecolor
+set termguicolors
+set background=dark
+
+if filereadable(expand("~/.vimrc_background"))
+	let base16colorspace = 256
+	source ~/.vimrc_background
+endif
+
 function! SetPassOptions()
 	set updatetime=60000
 	let color = synIDattr(hlID('CursorLine'), 'bg')
@@ -81,6 +91,7 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
+highlight Search ctermfg=8 ctermbg=3 guifg=#282a2e guibg=#f0c674
 
 set clipboard^=unnamedplus
 
@@ -232,15 +243,6 @@ set foldmethod=indent
 set foldlevelstart=99
 nnoremap <space><space> za
 
-" colors
-set termguicolors	" truecolor
-set background=dark
-
-if filereadable(expand("~/.vimrc_background"))
-	let base16colorspace = 256
-	source ~/.vimrc_background
-endif
-
 " airline
 set laststatus=2
 let g:airline_theme = 'base16_tomorrow'
@@ -286,6 +288,14 @@ inoremap <expr> <CR> deoplete#close_popup() . "\<CR>"
 " neomake
 autocmd! BufWritePost * Neomake
 
+let g:neomake_open_list = 2
+let g:neomake_warning_sign = {
+	\ 'text': 'W',
+	\ }
+let g:neomake_error_sign = {
+	\ 'text': 'E',
+	\ }
+
 "let g:neomake_c_enabled_makers=['clang', 'gcc']
 let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-xc']
 
@@ -293,4 +303,6 @@ let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-xc']
 let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-xc++', '-std=c++11']
 
 "let g:neomake_python_python_exe = 'python2'
-let g:neomake_python_pycodestyle_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503']
+"let g:neomake_python_pycodestyle_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503']
+let g:neomake_python_flake8_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503,W504']
+let g:neomake_python_pylint_args = ['--disable=E501,E121,E123,E126,E226,E24,E704,W503,W504']
