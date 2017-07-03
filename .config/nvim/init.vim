@@ -22,6 +22,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'zchee/deoplete-jedi'
 Plug 'keith/swift.vim'
 Plug 'hopibel/taskpaper.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 
 call plug#end()
 
@@ -317,3 +318,6 @@ let g:neomake_python_pylint_args = neomake#makers#ft#python#pylint()['args'] + [
 
 " deoplete-jedi
 let g:deoplete#sources#jedi#python_path = 'python3'
+
+" vim-indent-guides
+autocmd VimEnter * IndentGuidesEnable
