@@ -80,8 +80,8 @@ set number
 set tabstop=4
 set shiftwidth=4
 
-" Display 80 character line limit
-set colorcolumn=81
+" Display character line limit
+set colorcolumn=121
 
 " Highlight current light
 set cursorline
@@ -176,7 +176,13 @@ vnoremap <Up> gk
 
 " vp doesn't replace paste buffer
 function! RestoreRegister()
-	let @" = s:restore_reg
+	if &clipboard == "unnamed"
+		let @* = s:restore_reg
+	elseif &clipboard == "unnamedplus"
+		let @+ = s:restore_reg
+	else
+		let @" = s:restore_reg
+	endif
 	return ''
 endfunction
 function! s:Replace()
@@ -302,7 +308,12 @@ let g:neomake_c_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-xc']
 "let g:neomake_cpp_enabled_makers=['clang', 'gcc']
 let g:neomake_cpp_clang_args = ['-fsyntax-only', '-Wall', '-Wextra', '-xc++', '-std=c++11']
 
-"let g:neomake_python_python_exe = 'python2'
-"let g:neomake_python_pycodestyle_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503']
-let g:neomake_python_flake8_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503,W504']
-let g:neomake_python_pylint_args = ['--disable=E501,E121,E123,E126,E226,E24,E704,W503,W504']
+let g:neomake_python_python_exe = 'python3'
+let g:neomake_python_pylint_exe = 'pylint3'
+let g:neomake_python_flake8_args = neomake#makers#ft#python#flake8()['args'] + ['--max-line-length=120']
+let g:neomake_python_pylint_args = neomake#makers#ft#python#pylint()['args'] + ['--max-line-length=120']
+"let g:neomake_python_flake8_args = ['--ignore=E501,E121,E123,E126,E226,E24,E704,W503,W504']
+"let g:neomake_python_pylint_args = ['--disable=E501,E121,E123,E126,E226,E24,E704,W503,W504']
+
+" deoplete-jedi
+let g:deoplete#sources#jedi#python_path = 'python3'
